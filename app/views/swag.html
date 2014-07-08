@@ -3,7 +3,9 @@
         <div class="row">
             <div class="col-sm-12 col-lg-12">
                 <h1 class="h1">
-                    Swag <small>A whole lot of awesome!</small></h1>
+                    Swag
+                    <small>A whole lot of awesome!</small>
+                </h1>
             </div>
         </div>
     </div>
@@ -13,24 +15,42 @@
     <div class="row">
         <div class="col-md-12">
             <div class="input-group">
-                <input type="text" class="form-control">
                 <span class="input-group-addon">Search</span>
+                <input type="text" class="form-control" ng-model="swagSearch.title" placeholder="type product filter"/>
+
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3">
-            <h4>Product Title</h4>
+        <div class="col-md-12">
+            <!-- Only display when search string length > 0 -->
+            <p class="help-block" ng-show="swagSearch.length">Displaying results for: <strong ng-bind="swagSearch"></strong></p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3" ng-repeat="item in swag | filter: swagSearch">
+            <h4 ng-bind="item.title"></h4>
+
             <div class="row">
                 <div class="col-xs-4 col-md-6">
-                    <a href="#" class="thumbnail">
+                    <a ui-sref="product({id:item.id})" class="thumbnail">
+                        <!--
                         <img src="http://placehold.it/180x180" alt="">
+                        -->
+                        <img ng-src="assets/images/{{item.images[0]}}" alt="{{item.title}}"/>
+
                     </a>
                 </div>
-                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                <p ng-bind="item.description"></p>
             </div>
-            <p><a class="btn btn-default" href="#" role="button">View details <i class="glyphicon glyphicon-chevron-right"></i></a> <a class="btn btn-primary" href="#" role="button"><i class="glyphicon glyphicon-plus"></i> Add to cart</a></p>
+            <!-- product(xx) is resolved through states.js -->
+            <p><a class="btn btn-default" ui-sref="product({id:item.id})" role="button">View details <i
+                    class="glyphicon glyphicon-chevron-right"></i></a> <a class="btn btn-primary" href="#"
+                                                                          role="button"><i
+                    class="glyphicon glyphicon-plus"></i> Add to cart</a></p>
         </div>
+        <!--
         <div class="col-md-3">
             <h4>Product Title</h4>
             <div class="row">
@@ -67,6 +87,7 @@
             </div>
             <p><a class="btn btn-default" href="#" role="button">View details <i class="glyphicon glyphicon-chevron-right"></i></a> <a class="btn btn-primary" href="#" role="button"><i class="glyphicon glyphicon-plus"></i> Add to cart</a></p>
         </div>
+        -->
     </div>
 
 </div>

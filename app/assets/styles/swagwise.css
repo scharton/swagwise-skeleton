@@ -2,12 +2,21 @@ body {
     padding-top: 100px;
 }
 
-.navbar {
-    height: 100px;
-
+@media (min-width: 970px) {
+    .navbar-header {
+        height: 100px;
+    }
 }
 
-.nav li a {
-    padding-top: 40px;
-    padding-bottom: 40px;
+@media (min-width: 971px) {
+    .navbar {
+        height: 100px;
+
+    }
+
+    .nav li a {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
 }
+
