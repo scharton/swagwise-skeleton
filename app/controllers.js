@@ -3,22 +3,23 @@
     var app = angular.module('Swagwise');
 
     // $scope is what makes the data available to the view
-    app.controller('SwagController', function ($scope, SwagService) {
+    app.controller('SwagController', function ($scope, SwagService, filterFilter) {
+        var items = SwagService.query();
 
         $scope.swagSearch = "";
+        $scope.swag = items;
 
-//        SwagService.swag()
-//            .then(function (response) {
-//                // Put the data from the response onto the scope
-//
-////                console.log(response);
-////                console.log(response.data[0]); // a subset of data
-//                $scope.swag = response.data;
-//
-//            });
-//
-        $scope.swag = SwagService.query();
+        // Watch swag search for changes
+        $scope.$watch('swagSearch', function(newValue, oldValue) {
+//            console.log('new', newValue);
+//            console.log('old', oldValue);
+            if (newValue) {
+                $scope.swag = filterFilter(items, newValue);
+            } else {
+                $scope.swag = items;
+            }
 
+        });
     });
     // $stateParams provided by ui-router; gets stuff out of URL
     app.controller('ProductDetail', function ($scope, $stateParams, SwagService, $interval) {

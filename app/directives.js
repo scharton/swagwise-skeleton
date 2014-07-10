@@ -60,4 +60,16 @@
             }
         };
     });
+
+    app.directive('productGroup', function(){
+       return {
+           scope: {
+               swag: '='
+           },
+           restrict: 'E',
+           replace: true,
+           templateUrl: 'templates/product-group.html'
+       }
+    });
+
 })(window.angular);

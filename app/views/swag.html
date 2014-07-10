@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="input-group">
                 <span class="input-group-addon">Search</span>
-                <input type="text" class="form-control" ng-model="swagSearch.title" placeholder="type product filter"/>
+                <input type="text" class="form-control" ng-model="swagSearch" placeholder="type product filter"/>
 
             </div>
         </div>
@@ -29,23 +29,10 @@
 
     </div>
     <div class="row">
-        <div class="col-md-3" ng-repeat="item in swag | filter: swagSearch">
-            <h4 ng-bind="item.title"></h4>
 
-            <div class="row">
-                <div class="col-xs-4 col-md-6">
-                    <a ui-sref="product({id:item.id})" class="thumbnail">
-                        <rotating-thumbnail images="item.images" title="{{item.title}}"></rotating-thumbnail>
-                    </a>
-                </div>
-                <p ng-bind="item.description"></p>
-            </div>
-            <!-- product(xx) is resolved through states.js -->
-            <p><a class="btn btn-default" ui-sref="product({id:item.id})" role="button">View details <i
-                    class="glyphicon glyphicon-chevron-right"></i></a> <a class="btn btn-primary" href="#"
-                                                                          role="button"><i
-                    class="glyphicon glyphicon-plus"></i> Add to cart</a></p>
-        </div>
+        <product-group swag="swag">
+
+        </product-group>
     </div>
 
 </div>
