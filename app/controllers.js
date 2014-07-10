@@ -24,35 +24,11 @@
     app.controller('ProductDetail', function ($scope, $stateParams, SwagService, $interval) {
         var product_id = $stateParams.id; // based on product/:id
 
-        var counter = 1; // put counter here so it doesn't reinitialize on each mouseover
-        var rotator;
-
         // get() is part of $resource
-        $scope.item = SwagService.get({id: product_id}, function (item) {
-            $scope.productImage = item.images[0];
-        });
+        $scope.item = SwagService.get({id: product_id});
 
-        $scope.rotateImage = function () {
+        $scope.imageInterval = 3000;
 
-            if (rotator) {
-                return;
-            }
-            rotator = $interval(function () {
-                counter += 1;
-                if (counter == $scope.item.images.length) {
-                    counter = 0;
-                }
-                $scope.productImage = $scope.item.images[counter];
-
-            }, 1000);
-        };
-
-        $scope.cancelRotator = function () {
-            if (rotator) {
-                $interval.cancel(rotator);
-                rotator = undefined;
-            }
-        };
     });
 
 })(window.angular);
