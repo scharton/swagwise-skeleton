@@ -72,4 +72,20 @@
        }
     });
 
+    app.directive('addCartButton', function (CartService){
+        return {
+            scope: {
+                item: '='
+            },
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'templates/add-cart-button.html',
+            link: function(scope) {
+                scope.addItem = function() {
+                    CartService.addItem(scope.item);
+                }
+            }
+        };
+    });
+
 })(window.angular);
