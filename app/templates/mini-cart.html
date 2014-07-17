@@ -1,0 +1,14 @@
+<div class="row" ng-show="getItemCount()">
+    <!-- Use ng-show to show if the items have been added to the cart -->
+    <!-- getItemCount is actually getItemCount() > 0 -->
+
+
+    <div class="col-sm-5 col-sm-offset-7 text-right">
+        <div class="well">
+            <!-- Display the subtotal followed by the number of items in the cart -->
+            <i class="glyphicon glyphicon-shopping-cart"></i> Subtotal: {{getCartSubtotal() | currency}} -
+            {{getItemCount()}} items
+            <a class="btn btn-success" ui-sref="cart" role="button">view cart</a>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,7 @@
     app.directive('rotatingThumbnail', function ($interval) {
         return {
             replace: true, // makes the HTML replaced so img set properly; makes <rotating-thumbnail> go away so
-                            // images aren't all weird
+            // images aren't all weird
             // E - element, A - attribute, C - CSS class
             restrict: 'E',
             // String @, One-way function &, Two-way bound object =
@@ -14,8 +14,7 @@
                 images: '=', // attribute passed in will be called 'images'
                 title: '@'
             },
-            templateUrl: 'templates/rotating-thumbnail.html'
-            ,
+            templateUrl: 'templates/rotating-thumbnail.html',
             link: function (scope, element, attributes) { // passed in by position, not injected
                 // element and attributes can technically be removed because we aren't using them
                 var rotator;
@@ -61,18 +60,18 @@
         };
     });
 
-    app.directive('productGroup', function(){
-       return {
-           scope: {
-               swag: '='
-           },
-           restrict: 'E',
-           replace: true,
-           templateUrl: 'templates/product-group.html'
-       }
+    app.directive('productGroup', function () {
+        return {
+            scope: {
+                swag: '='
+            },
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'templates/product-group.html'
+        }
     });
 
-    app.directive('addCartButton', function (CartService){
+    app.directive('addCartButton', function (CartService) {
         return {
             scope: {
                 item: '='
@@ -80,11 +79,36 @@
             restrict: 'E',
             replace: true,
             templateUrl: 'templates/add-cart-button.html',
-            link: function(scope) {
-                scope.addItem = function() {
+            link: function (scope) {
+                scope.addItem = function () {
                     CartService.addItem(scope.item);
                 }
             }
+        };
+    });
+
+    app.directive('miniCart', function (CartService) {
+
+        return {
+            // Create an isolated scope
+            scope: {
+            },
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'templates/mini-cart.html',
+            link: function (scope, elem, attr) {
+
+                scope.getCartSubtotal = function () {
+                    // Returns subtotal from CartService
+                    return CartService.getCartSubtotal();
+                };
+
+                scope.getItemCount = function () {
+                    //Returns the item count from the CartService
+                    return CartService.getItemCount();
+                };
+            }
+
         };
     });
 

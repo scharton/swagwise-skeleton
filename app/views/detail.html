@@ -1,4 +1,6 @@
 <div class="container">
+    <mini-cart></mini-cart>
+
     <div class="row">
         <div class="col-md-12">
             <div class="well well-lg">
@@ -16,8 +18,9 @@
 
                         <p ng-bind="item.description"></p>
 
-                        <p><add-cart-button item="item"></add-cart-button></p>
-
+                        <p>
+                            <add-cart-button item="item"></add-cart-button>
+                        </p>
                     </div>
                 </div>
 

@@ -103,7 +103,7 @@
 
             getCartTotal: function () {
                 // Add stuff like shipping and tax
-                return getCartSubtotal();
+                return this.getCartSubtotal();
             },
 
             checkout: function () {

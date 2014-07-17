@@ -22,6 +22,14 @@
             return CartService.getItemCount();
         };
 
+        $scope.getItemSubtotal = function(item) {
+            return (item.specialPrice || item.price) * item.quantity;
+        };
+
+        $scope.getItemPrice = function(item) {
+            return item.specialPrice || item.price;
+        };
+
         $scope.getCartSubtotal = function() {
             // Return the subtotal using the getCartSubtotal method of the CartService
             return CartService.getCartSubtotal();
@@ -40,6 +48,9 @@
         $scope.emptyCart = function() {
             // Invoke the emptyCart method of the CartService
             CartService.emptyCart();
+
+           // if use ng-show="getItemCount()" then this isn't needed
+           // $scope.items = CartService.getItems();
         }
 
         $scope.checkout = function() {
