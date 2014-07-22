@@ -98,6 +98,9 @@
             templateUrl: 'templates/mini-cart.html',
             link: function (scope, elem, attr) {
 
+                // call the cookie - this isn't working on the home page
+                CartService.getItems();
+
                 scope.getCartSubtotal = function () {
                     // Returns subtotal from CartService
                     return CartService.getCartSubtotal();

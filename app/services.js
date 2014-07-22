@@ -10,7 +10,7 @@
     });
 
     // Inject in $cookieStore, SwagService and app config
-    app.factory('CartService', function () {
+    app.factory('CartService', function ($cookieStore, SwagService) {
 
         // Private items object
         var items = {
@@ -20,58 +20,66 @@
 
         };
 
-        // this only needs to be private
-        function updateItemsCookie() {
-
-        }
 
         // Angular factories return service objects
         return {
 
             getItems: function () {
-                // Initialize itemsCookie variable
+                // Initialize the itemsCookie variable
                 var itemsCookie;
-                // Check if items object has been populated
+                // Check if cart is empty
                 if (!items.length) {
-                    // Populate items object from cookie
-
-                    // Check if cookie exists
+                    // Get the items cookie
+                    itemsCookie = $cookieStore.get('items');
+                    // Check if the item cookie exists
                     if (itemsCookie) {
-                        // Loop through cookie and get the item by it's id
-                        // Add each item to the items object and set it's quantity
-
+                        // Loop through the items in the cookie
+                        angular.forEach(itemsCookie, function (value, key) {
+                            // Get the product details from the ProductService using the guid
+                            SwagService.get({id: key}, function (response) {
+                                var product = response; // don't use response.data because the response is the object
+                                // Update the quantity to the quantity saved in the cookie
+                                product.quantity = value;
+                                // Add the product to the cart items object using the guid as the key
+                                // typo - not guid, use id
+                                items[product.id] = product;
+                            });
+                        });
                     }
                 }
-                // Return the items object
+                // Returns items object
                 return items;
             },
+
 
             addItem: function (item) {
                 // Checks if item already exists
                 if (items[item.id]) {
                     // If it exists, updates the quantity
-                    items[item.id].quantity += 1;
+                    items[item.id].quantity = parseInt(items[item.id].quantity) + 1;
                 } else {
                     item.quantity = 1;
+                    items[item.id] = item;
                 }
 
-                items[item.id] = item;
+
 
                 // Update cookie
-                updateItemsCookie();
+                this.updateItemsCookie();
             },
 
             removeItem: function (id) {
                 // Removes an item from the items object
                 delete items[id];
                 // Update cookie
-                updateItemsCookie();
+                this.updateItemsCookie();
             },
 
             emptyCart: function () {
                 // Re-initialize items object to an empty object
                 items = {};
                 // Remove items cookie using $cookieStore
+                $cookieStore.remove('items');
 
             },
 
@@ -108,8 +116,21 @@
 
             checkout: function () {
                 // Implement the checkout
-            }
+            },
 
+            updateItemsCookie: function () {
+                // Initialize an object to be saved as the cookie
+                var itemsCookie = {};
+                // Loop through the items in the cart
+                angular.forEach(items, function (item, key) {
+                    // Add each item to the items cookie,
+                    // using the guid as the key and the quantity as the value
+                    itemsCookie[key] = item.quantity;
+                });
+//            console.log(itemsCookie);
+                // Use the $cookieStore service to persist the itemsCookie object to the cookie named 'items'
+                $cookieStore.put('items', itemsCookie);
+            }
 
 
         };

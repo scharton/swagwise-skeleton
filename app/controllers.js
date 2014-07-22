@@ -12,6 +12,17 @@
         // Set the items on the scope to the items in the CartService using the getItems method
         $scope.items = CartService.getItems();
 
+        $scope.updateCookie = function() {
+            CartService.updateItemsCookie();
+        };
+
+        // watch items object on the scope
+//        $scope.$watch('items', function(oldVal, newVal){
+//            console.log('old value', oldVal);
+//            console.log('new value', newVal);
+//            CartService.updateItemsCookie();
+//        });
+
         $scope.addItem = function(item) {
             // Pass the item into the addItem method of the CartService
             CartService.addItem(item);
