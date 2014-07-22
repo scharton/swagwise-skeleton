@@ -46,7 +46,7 @@
                             </div>
                         </td>
                         <td class="col-sm-1 col-md-1 text-center">
-                            <input type="text" class="form-control" required ng-model="item.quantity" ng-change="updateCookie()">
+                            <input type="text" class="form-control" required ng-model="item.quantity" ng-change="updateItem(item)">
                         </td>
                         <td class="col-sm-1 col-md-1 text-center"><strong ng-bind="getItemPrice(item) | currency">$0.00</strong></td>
                         <td class="col-sm-1 col-md-1 text-center"><strong ng-bind="getItemSubtotal(item) | currency">$0.00</strong></td>
