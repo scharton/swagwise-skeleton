@@ -124,6 +124,8 @@ require('./routes.js')(app);                            		        // configure o
 
 /* =============== START APP (THIS GOES LAST) ============== */
 
-app.listen(port);                                                       // startup our app at http://localhost:9001
-console.log('The MEAN app is started at http://localhost:' + port);   // shoutout to the user
+app.listen(port, function () {
+    console.log('The MEAN app is started at http://localhost:' + port);
+});                                                       // startup our app at http://localhost:9001
+//console.log('The MEAN app is started at http://localhost:' + port);   // shoutout to the user
 exports = module.exports = app;                                         // expose app

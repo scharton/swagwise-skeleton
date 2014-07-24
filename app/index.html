@@ -51,7 +51,8 @@
             </ul>
             <!-- only show if currentUser is on the rootScope -->
             <ul class="nav navbar-nav pull-right" ng-if="currentUser">
-                <li class="navbar-text" ng-bind="currentUser.email"></li>
+                <!--<li class="navbar-text" ng-bind="currentUser.email"></li>-->
+                <li><a href="javascript:void(0)" ng-bind="currentUser.email"></a> </li>
                 <li>
                     <a href="javascript:void(0);" ng-click="logout()">Logout</a>
                 </li>

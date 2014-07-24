@@ -4,21 +4,33 @@
             <div class="panel-body">
                 <h2 class="text-center">Login</h2>
 
-                <div class="alert alert-{{alert.type}}"></div>
+                <div class="alert alert-{{alert.type}}">{{alert.message}}</div>
 
-                <form method="post" name="loginForm">
+                <form method="post" ng-submit="login()" name="loginForm">
 
                     <div class="form-group">
-                        <input type="email" name="email" class="form-control input-lg"
+                        <input type="email" name="email" ng-model="email" class="form-control input-lg"
                                placeholder="Email" required autofocus>
                     </div>
 
+                    <div class="help-block text-danger" ng-if="loginForm.email.$dirty"
+                         ng-messages="loginForm.email.$error">
+                        <div ng-message="required">Your email address is required.</div>
+                        <div ng-message="email">Your email address is invalid.</div>
+                    </div>
+
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control input-lg"
+                        <input type="password" name="password" ng-model="password" class="form-control input-lg"
                                placeholder="Password" required>
                     </div>
 
-                    <button type="submit" class="btn btn-lg btn-block btn-success">
+                    <div class="help-block text-danger"
+                         ng-if="loginForm.password.$dirty"
+                         ng-messages="loginForm.password.$error">
+                        <div ng-message="required">Password is required.</div>
+                    </div>
+
+                    <button type="submit" ng-disable="loginForm.$invalid" class="btn btn-lg btn-block btn-success">
                         Sign In
                     </button>
                 </form>
