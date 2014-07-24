@@ -14,11 +14,9 @@
                 .state('cart', {url: '/cart', templateUrl: 'views/cart.html', controller: 'CartController'})
                 .state('contact', {url: '/contact', templateUrl: 'views/contact.html'})
                 .state('login', {url: '/login', templateUrl: 'views/login.html'})
-                .state('signup', {url: '/signup', templateUrl: 'views/signup.html'})
+                .state('signup', {url: '/signup', templateUrl: 'views/signup.html', controller: 'SignupController'})
                 .state('product', {url: '/product/:id', templateUrl: 'views/detail.html', controller: 'ProductDetail'})
             ;
-
-//            $stateProvider.state('home', {views: {'main': {url: '/', templateUrl: 'views/home.html'}}});
         }
     )
     ;
