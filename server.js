@@ -3,7 +3,7 @@
 var express = require('express'),
     app = express(),
     path = require('path'),
-    fs = require('fs'),
+    fs = require('fs'), // file system
     logger = require('morgan'),
     mongoose = require('mongoose'),
     uriUtil = require('mongodb-uri');
@@ -14,7 +14,21 @@ var LocalStrategy = require('passport-local').Strategy;
 var bcrypt        = require('bcrypt-nodejs');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var http         = require('http');
+var https        = require('https');
+var privateKey   = fs.readFileSync('cert/server.key', 'utf8');
+var certificate  = fs.readFileSync('cert/server.crt', 'utf8');
+var credentials  = {key: privateKey, cert: certificate};
 
+var httpServer   = http.createServer(app); // Node's native server, registering express in Node
+var httpsServer  = https.createServer(credentials, app);
+var sslport = 8443;
+
+
+
+// test secret key : sk_test_4UOJTjvKipzSNLY9PdUhgn91
+// var stripe       = require('stripe')('your_key_here');
+var stripe       = require('stripe')('sk_test_4UOJTjvKipzSNLY9PdUhgn91');
 /*
  * Mongoose by default sets the auto_reconnect option to true.
  * We recommend setting socket options at both the server and replica set level.
@@ -51,6 +65,10 @@ conn.on('error', console.error.bind(console, 'connection error:'));
 conn.once('open', function () {
     // Wait for the database connection to establish, then start the app.
     console.log('Connected to MongoLab');
+    httpServer.listen(port);                                          // startup our app at http://localhost:9001
+    httpsServer.listen(sslport);                                      // startup our HTTPS server on http://localhost:8443 or :443
+    console.log('Swag at http://localhost:' + port);
+    console.log('Swag secure at https://localhost' + sslport);
 });
 
 /* ============== MODELS ========================== */
@@ -122,10 +140,36 @@ app.use(function(req, res, next) {
 
 require('./routes.js')(app);                            		        // configure our routes, passing in app reference
 
+
+/* ======================== STRIPE ========================= */
+stripe.charges.create({
+    amount: 400,
+    currency: "usd",
+    card: {
+        number: '4242424242424242',
+        exp_month: 07,
+        exp_year: 2015,
+        name: 'BB Thorton',
+        "brand": "Visa",
+        "funding": "credit",
+        "country": "US",
+        "address_line1": null,
+        "address_line2": null,
+        "address_city": null,
+        "address_state": null,
+        "address_zip": null,
+        "address_country": null,
+        "cvc_check": null,
+        "address_line1_check": null,
+        "address_zip_check": null,
+        "customer": null
+    }
+}, function(err, charge) {
+    console.log(charge);
+});
+
 /* =============== START APP (THIS GOES LAST) ============== */
 
-app.listen(port, function () {
-    console.log('The MEAN app is started at http://localhost:' + port);
-});                                                       // startup our app at http://localhost:9001
+                                                   // startup our app at http://localhost:9001
 //console.log('The MEAN app is started at http://localhost:' + port);   // shoutout to the user
 exports = module.exports = app;                                         // expose app
