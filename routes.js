@@ -61,14 +61,25 @@ module.exports = function (app) {
     // signup API route
     app.post('/api/signup', function(req, res, next) {
         var User = mongoose.model('User');
-        var user = new User({
-            email: req.body.email,
-            password: req.body.password
+
+        // Create Stripe customer
+        stripe.customers.create({
+            email: req.body.email
+        }, function(err, customer) {
+           if (err) return next(err);
+
+            var user = new User({
+                email: req.body.email,
+                password: req.body.password,
+                customer_id: customer.id
+            });
+
+            user.save(function(err) {
+                if (err) return next(err);
+                res.send(200);
+            });
         });
-        user.save(function(err) {
-            if (err) return next(err);
-            res.send(200);
-        });
+
     });
 
     /* ========================= FRONT-END ROUTES ======================= */

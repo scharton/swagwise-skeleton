@@ -4,7 +4,8 @@ var bcrypt = require('bcrypt-nodejs');
 
 var userSchema = new mongoose.Schema({
     email: { type: String, unique: true },
-    password: String
+    password: String,
+    customer_id: String
 });
 
 var User = mongoose.model('User', userSchema); // no 3rd param causes mongoose to create 'users' collection on Mongo db
