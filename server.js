@@ -26,9 +26,6 @@ var sslport = 8443;
 
 
 
-// test secret key : sk_test_4UOJTjvKipzSNLY9PdUhgn91
-// var stripe       = require('stripe')('your_key_here');
-var stripe       = require('stripe')('sk_test_4UOJTjvKipzSNLY9PdUhgn91');
 /*
  * Mongoose by default sets the auto_reconnect option to true.
  * We recommend setting socket options at both the server and replica set level.
@@ -141,35 +138,6 @@ app.use(function(req, res, next) {
 require('./routes.js')(app);                            		        // configure our routes, passing in app reference
 
 
-/* ======================== STRIPE ========================= */
-stripe.charges.create({
-    amount: 400,
-    currency: "usd",
-    card: {
-        number: '4242424242424242',
-        exp_month: 07,
-        exp_year: 2015,
-        name: 'BB Thorton',
-        "brand": "Visa",
-        "funding": "credit",
-        "country": "US",
-        "address_line1": null,
-        "address_line2": null,
-        "address_city": null,
-        "address_state": null,
-        "address_zip": null,
-        "address_country": null,
-        "cvc_check": null,
-        "address_line1_check": null,
-        "address_zip_check": null,
-        "customer": null
-    }
-}, function(err, charge) {
-    console.log(charge);
-});
-
 /* =============== START APP (THIS GOES LAST) ============== */
 
-                                                   // startup our app at http://localhost:9001
-//console.log('The MEAN app is started at http://localhost:' + port);   // shoutout to the user
 exports = module.exports = app;                                         // expose app

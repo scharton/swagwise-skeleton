@@ -4,7 +4,10 @@ module.exports = function (app) {
     var mongoose = require('mongoose');
     var passport = require('passport');
 
-
+// test secret key : sk_test_4UOJTjvKipzSNLY9PdUhgn91
+// var stripe       = require('stripe')('your_key_here');
+// require(stripe) returns a function immediately invoked with the second part
+    var stripe       = require('stripe')('sk_test_4UOJTjvKipzSNLY9PdUhgn91');
     /* ======================= REST ROUTES ====================== */
     // Handle API calls
 
@@ -67,6 +70,36 @@ module.exports = function (app) {
             res.send(200);
         });
     });
+
+    /* ========================= FRONT-END ROUTES ======================= */
+    app.route('/api/checkout')
+        .post(function(req, res, next) {
+            stripe.charges.create({
+                amount: 5000,
+                currency: "usd",
+                card: {
+                    number: '4242424242424242',
+                    exp_month: 07,
+                    exp_year: 2015,
+                    name: 'John Smoltz',
+                    "brand": "Visa",
+                    "funding": "credit",
+                    "country": "US",
+                    "address_line1": null,
+                    "address_line2": null,
+                    "address_city": null,
+                    "address_state": null,
+                    "address_zip": null,
+                    "address_country": null,
+                    "cvc_check": null,
+                    "address_line1_check": null,
+                    "address_zip_check": null,
+                    "customer": null
+                }
+            }, function(err, charge) {
+                res.send(charge);
+            });
+        });
 
     /* ========================= FRONT-END ROUTES ======================= */
     // Route to handle all angular requests
