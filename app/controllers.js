@@ -202,7 +202,9 @@
         var product_id = $stateParams.id; // based on product/:id
 
         // get() is part of $resource
-        $scope.item = SwagService.get({id: product_id});
+        $scope.item = SwagService.get({id: product_id}, function(item) {
+            $scope.relatedSwag = SwagService.query({tags: item.tags[1]});
+        });
 
         $scope.imageInterval = 3000;
 
