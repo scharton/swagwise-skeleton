@@ -12,6 +12,8 @@
                 .state('swag', {url: '/swag', templateUrl: 'views/swag.html', controller: 'SwagController'})
                 .state('about', {url: '/about', templateUrl: 'views/about.html'})
                 .state('cart', {url: '/cart', templateUrl: 'views/cart.html', controller: 'CartController'})
+                .state('checkout', {url: '/checkout', templateUrl: 'views/checkout.html', controller: 'CheckoutController'})
+                .state('receipt', {url: '/receipt', templateUrl: 'views/receipt.html', controller: 'ReceiptController' })
                 .state('contact', {url: '/contact', templateUrl: 'views/contact.html'})
                 .state('login', {url: '/login', templateUrl: 'views/login.html', controller: 'LoginController'})
                 .state('signup', {url: '/signup', templateUrl: 'views/signup.html', controller: 'SignupController'})

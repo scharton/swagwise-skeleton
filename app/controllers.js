@@ -26,7 +26,7 @@
 
     });
 
-    app.controller('SignupController', function($scope, $state, $timeout, Auth) {
+    app.controller('SignupController', function ($scope, $state, $timeout, Auth) {
 
         function successCallback() {
             $scope.alert = {
@@ -34,7 +34,7 @@
                 message: 'Your account has been created.'
             };
 
-            $timeout(function() {
+            $timeout(function () {
 
                 $state.go('login');
 
@@ -49,21 +49,21 @@
                 message: 'There was an error creating your account. Please try again.'
             };
 
-            $timeout(function() {
+            $timeout(function () {
                 $scope.alert = undefined;
 
             }, 3000);
         }
 
-        $scope.signup = function() {
+        $scope.signup = function () {
             Auth.signup({
-                email   : $scope.email,
+                email: $scope.email,
                 password: $scope.password
             }, successCallback, errorCallback);
         };
     });
 
-    app.controller('LoginController', function($scope, $state, $timeout, Auth) {
+    app.controller('LoginController', function ($scope, $state, $timeout, Auth) {
 
         function successCallback() {
             $scope.alert = {
@@ -71,7 +71,7 @@
                 message: 'You have successfully logged in.'
             };
 
-            $timeout(function() {
+            $timeout(function () {
 
                 $state.go('home');
 
@@ -86,13 +86,13 @@
                 message: 'Invalid username and/or password'
             };
 
-            $timeout(function() {
+            $timeout(function () {
                 $scope.alert = undefined;
 
             }, 3000);
         }
 
-        $scope.login = function() {
+        $scope.login = function () {
 
             Auth.login({
                 email: $scope.email,
@@ -108,34 +108,34 @@
     });
 
     // Inject in the CartService
-    app.controller('CartController', function ($scope, CartService) {
+    app.controller('CartController', function ($scope, $state, CartService) {
 
-        // Set the items on the scope to the items in the CartService using the getItems method
+        // set the items on the scope to the items in the cartservice using the getitems method
         $scope.items = CartService.getItems();
 
         $scope.updateItem = function (item) {
             /*
-            if (typeof item.quantity === 'number') {
-                CartService.updateItemsCookie();
-            }
+             if (typeof item.quantity === 'number') {
+             cartservice.updateitemscookie();
+             }
              */
             CartService.updateItemsCookie();
         };
 
         // watch items object on the scope
-//        $scope.$watch('items', function(oldVal, newVal){
-//            console.log('old value', oldVal);
-//            console.log('new value', newVal);
-//            CartService.updateItemsCookie();
+//        $scope.$watch('items', function(oldval, newval){
+//            console.log('old value', oldval);
+//            console.log('new value', newval);
+//            cartservice.updateitemscookie();
 //        });
 
         $scope.addItem = function (item) {
-            // Pass the item into the addItem method of the CartService
+            // pass the item into the additem method of the cartservice
             CartService.addItem(item);
         };
 
         $scope.getItemCount = function () {
-            // Return the item count from the CartService
+            // return the item count from the cartservice
             return CartService.getItemCount();
         };
 
@@ -148,35 +148,52 @@
         };
 
         $scope.getCartSubtotal = function () {
-            // Return the subtotal using the getCartSubtotal method of the CartService
+            // return the subtotal using the getcartsubtotal method of the cartservice
             return CartService.getCartSubtotal();
         };
 
         $scope.getCartTotal = function () {
-            // Return the cart total using the getCartTotal methode of the CartService
+            // return the cart total using the getcarttotal methode of the cartservice
             return CartService.getCartTotal();
         };
 
         $scope.removeItem = function (id) {
-            // Pass the item id into the removeItem method of the CartService
+            // pass the item id into the removeitem method of the cartservice
             CartService.removeItem(id);
         };
 
         $scope.emptyCart = function () {
-            // Invoke the emptyCart method of the CartService
+            // invoke the emptycart method of the cartservice
             CartService.emptyCart();
 
-            // if use ng-show="getItemCount()" then this isn't needed
-            // $scope.items = CartService.getItems();
+            // if use ng-show="getitemcount()" then this isn't needed
+            // $scope.items = cartservice.getitems();
         }
 
         $scope.checkout = function () {
-            // Invoke the checkout method of the CartService
-            CartService.checkout();
+            // invoke the checkout method of the cartservice
+            $state.go('checkout');
         };
 
     });
 
+    app.controller('CheckoutController', function ($scope, CartService)  {
+        // create an object on the $scope for a card
+        // the view checkout.html is updating card using ng-model
+        $scope.card = {};
+
+        $scope.checkout = function () {
+            // We moved all this logic from this controller method to the service
+            CartService.checkout($scope.card);
+        };
+    });
+// $stateParams see angular-ui-router
+    app.controller('ReceiptController', function($scope, $stateParams, CartService){
+        $scope.order = $stateParams;
+        console.log($stateParams);
+        $scope.items = CartService.getItems();
+        CartService.emptyCart();
+    });
 
     // $scope is what makes the data available to the view
     app.controller('SwagController', function ($scope, SwagService, filterFilter) {
@@ -202,7 +219,7 @@
         var product_id = $stateParams.id; // based on product/:id
 
         // get() is part of $resource
-        $scope.item = SwagService.get({id: product_id}, function(item) {
+        $scope.item = SwagService.get({id: product_id}, function (item) {
             $scope.relatedSwag = SwagService.query({tags: item.tags[1]});
         });
 

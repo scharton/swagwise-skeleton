@@ -3,31 +3,40 @@
 
     var app = angular.module('Swagwise');
 
-    app.factory('Auth', function($http, $rootScope, $cookieStore) {
+    // new API service to simplify services
+    app.factory('API', function ($resource) {
+        return {
+            swag: $resource('/api/swag/:id'),
+            checkout: $resource('/api/checkout'),
+            login: $resource('/api/login'),
+            logout: $resource('/api/logout'),
+            register: $resource('/api/register')
+
+        };
+    });
+
+    app.factory('Auth', function (API, $rootScope, $cookieStore) {
 
         $rootScope.currentUser = $cookieStore.get('user');
         $cookieStore.remove('user');
 
         return {
 
-            login: function(user, success, error) {
-                return $http.post('/api/login', user)
-                    .success(function(data) {
+            login: function (user, success, error) {
+                return API.login.save(user)
+                    .$promise.then(function (data) {
                         $rootScope.currentUser = data;
-
                         success();
-                    })
-                    .error(error);
+                    }, error);
             },
 
-            signup: function(user, success, error) {
-                return $http.post('/api/signup', user)
-                    .success(success)
-                    .error(error);
+            signup: function (user, success, error) {
+                return API.register.save(user)
+                    .$promise.then(success, error);
             },
 
-            logout: function(success) {
-                return $http.get('/api/logout').success(function() {
+            logout: function (success) {
+                return API.logout.get('/api/logout').$promise.then(function () {
 
                     $rootScope.currentUser = null;
                     $cookieStore.remove('user');
@@ -39,14 +48,14 @@
 
     });
 
-    app.factory('SwagService', function ($resource) {
+    app.factory('SwagService', function (API) {
 
         // if :id isn't passed in, it just treats as '/api/swag'
-        return $resource('/api/swag/:id');
+        return API.swag;
     });
 
     // Inject in $cookieStore, SwagService and app config
-    app.factory('CartService', function ($cookieStore, SwagService) {
+    app.factory('CartService', function ($state, $cookieStore, API) {
 
         // Private items object
         var items = {
@@ -72,7 +81,7 @@
                         // Loop through the items in the cookie
                         angular.forEach(itemsCookie, function (value, key) {
                             // Get the product details from the ProductService using the guid
-                            SwagService.get({id: key}, function (response) {
+                            API.swag.get({id: key}, function (response) {
                                 var product = response; // don't use response.data because the response is the object
                                 // Update the quantity to the quantity saved in the cookie
                                 product.quantity = value;
@@ -97,7 +106,6 @@
                     item.quantity = 1;
                     items[item.id] = item;
                 }
-
 
 
                 // Update cookie
@@ -150,8 +158,25 @@
                 return this.getCartSubtotal();
             },
 
-            checkout: function () {
+            checkout: function (card) {
                 // Implement the checkout
+                var user = $cookieStore.get('user');
+
+                var data = {
+                    amount: this.getCartTotal(),
+                    customer_id: user.customer_id
+                    // if you want to support anonymous purchase
+//                customer_id: (user ? user.customer_id : undefined)
+                };
+
+                // Merge card data
+                angular.extend(data, card);
+
+                // Use $promise or just a regular callback as the 2nd parameter of save(data, callback)/
+                API.checkout.save(data).$promise.then(
+                    function (response) {
+                        $state.go('receipt', response);
+                    });
             },
 
             updateItemsCookie: function () {
@@ -172,7 +197,6 @@
         };
 
     });
-
 
 
 })(window.angular);
